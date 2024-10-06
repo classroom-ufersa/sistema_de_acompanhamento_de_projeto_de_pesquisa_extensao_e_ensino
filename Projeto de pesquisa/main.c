@@ -1,11 +1,11 @@
 #include "sistema.h"
 
-int main() {
+int main(){
     No *lista = NULL;
-    int opcao, codigo_para_excluir;
+    int opcao = 0, proximo_id = 1;
     char *nome_arquivo = "projetos.txt";
 
-    ler_arquivo(&lista, nome_arquivo);
+    ler_arquivo(&lista, nome_arquivo, &proximo_id);
 
     do {
         printf("\nDigite uma opcao:\n");
@@ -19,63 +19,87 @@ int main() {
         printf("8. Sair\n");
         printf("Opcao: ");
 
-        if(scanf("%d", &opcao) != 1){
-            printf("Opcao nao valida! Insira um número.\n");
-            while (getchar() != '\n');
-            continue;
-        }
+        char input[9];
+        scanf("%s", input);
+        //atoi é uma função em C que converte uma string em um número inteiro
+        opcao = atoi(input);
 
         switch (opcao) {
             case 1:
-                adicionar_projeto(&lista);
-                abrir_arquivo(lista, nome_arquivo);
-                break;
-
-            case 2:
-                listar_projeto(lista);
-                break;
-
-            case 3:
-                consultar_projeto_por_tipo(lista);
-                break;
-
-            case 4:
-                consultar_projeto_por_situacao(lista);
-                break;
-            
-            case 5:
-                buscar_projeto_por_codigo(lista);
-                break;
-
-            case 6:
-                editar_dados_do_projeto(lista);
-                break;
-
-            case 7:
-                if (lista == NULL) {
-                    printf("A lista está vazia.\n");
+                if (strcmp(input, "1") != 0) {
+                    printf("Opcao invalida não cadastrada!\n");
                 } else {
-                    printf("Digite o codigo do projeto para excluir: ");
-                    if (scanf("%d", &codigo_para_excluir) == 1) {
-                        excluir_projeto(&lista, codigo_para_excluir);
-                        abrir_arquivo(lista, nome_arquivo);
+                    adicionar_projeto(&lista, &proximo_id, nome_arquivo);
+                    abrir_arquivo(lista, nome_arquivo);
+                }
+                break;
+            case 2:
+                if (strcmp(input, "2") != 0) {
+                    printf("Opcao invalida não cadastrada!\n");
+                } else {
+                    listar_projeto(lista);
+                }
+                break;
+            case 3:
+                if (strcmp(input, "3") != 0) {
+                    printf("Opcao invalida não cadastrada!\n");
+                } else {
+                    consultar_projeto_por_tipo(lista);
+                }
+                break;
+            case 4:
+                if (strcmp(input, "4") != 0) {
+                    printf("Opcao invalida não cadastrada!\n");
+                } else {
+                    consultar_projeto_por_situacao(lista);
+                }
+                break;
+            case 5:
+                if (strcmp(input, "5") != 0) {
+                    printf("Opcao invalida não cadastrada!\n");
+                } else {
+                    buscar_projeto_por_codigo(lista);
+                }
+                break;
+            case 6:
+                if (strcmp(input, "6") != 0) {
+                    printf("Opcao invalida não cadastrada!\n");
+                } else {
+                    editar_dados_do_projeto(lista);
+                    abrir_arquivo(lista, nome_arquivo);
+                }
+                break;
+            case 7:
+                if (strcmp(input, "7") != 0) {
+                    printf("Opcao invalida não cadastrada!\n");
+                } else {
+                    if (lista == NULL) {
+                        printf("A lista está vazia.\n");
                     } else {
-                        printf("Cidigo invalido!\n");
-                        while (getchar() != '\n');
+                        printf("Digite o ID do projeto para excluir: ");
+                        int id_para_excluir;
+                        if (scanf("%d", &id_para_excluir) == 1) {
+                            excluir_projeto(&lista, id_para_excluir);
+                            abrir_arquivo(lista, nome_arquivo);
+                        } else {
+                            printf("ID inválido!\n");
+                            while (getchar() != '\n');
+                        }
                     }
                 }
                 break;
-
             case 8:
-                liberar_lista(lista);
-                printf("Saindo...\n");
+                if (strcmp(input, "8") != 0) {
+                    printf("Opcao invalida não cadastrada!\n");
+                } else {
+                    liberar_lista(lista);
+                    printf("Saindo...\n");
+                }
                 break;
-
             default:
                 printf("Opcao não cadastrada!\n");
                 break;
         }
     } while (opcao != 8);
-
     return 0;
 }
