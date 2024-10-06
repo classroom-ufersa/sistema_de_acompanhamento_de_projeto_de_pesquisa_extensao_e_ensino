@@ -1,0 +1,35 @@
+Tipo: Ensino
+Título do projeto: Teste 3.0
+Código do projeto: 3
+Data de inicio: 22.06.2024
+Situação: Andamento
+Data de Término: --/--/----
+Coordenador: Jose
+Total de alunos: 1
+Alunos envolvidos: Jose
+Órgão Financeiro: Ufersa
+Descrição do projeto: Apenas um teste
+
+Tipo: Extensão
+Título do projeto: Teste 2.0
+Código do projeto: 2
+Data de inicio: 22.05.2022
+Situação: Concluído
+Data de Término: 29.06.2024
+Coordenador: Maria
+Total de alunos: 1
+Alunos envolvidos: Pedro
+Órgão Financeiro: Não há órgão financeiro!
+Descrição do projeto: Apenas um teste
+
+Tipo: Pesquisa
+Título do projeto: Teste
+Código do projeto: 1
+Data de inicio: 20.11.2002
+Situação: Andamento
+Data de Término: --/--/----
+Coordenador: Pedro
+Total de alunos: 1
+Alunos envolvidos: Maria
+Órgão Financeiro: Não há órgão financeiro!
+Descrição do projeto: Apenas um teste
