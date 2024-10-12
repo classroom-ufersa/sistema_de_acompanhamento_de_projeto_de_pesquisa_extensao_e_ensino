@@ -25,6 +25,7 @@ struct nome{
 };
 
 struct dados{
+    int num_alunos;  // Adicione este campo para armazenar o número de alunos
     int codigo_identificador;
     char descricao_do_projeto[1000];
     Data data;
@@ -99,27 +100,31 @@ void adicionar_projeto(No **lista, int *proximo_id, char *nome_arquivo) {
     int alunos, i, orgao_fi, tipo_projeto, situacao_projeto;
     
     while (1){
-    
-    printf("\nInforme o tipo do seu projeto: \n1. Pesquisa\n2. Extensão\n3. Ensino\n");
-    getchar();
-    char input[9];
-    scanf("%s", input);
 
-        int valido = 1;
-        for (int i = 0; input[i] != '\0'; i++) {
-            if (!isdigit(input[i])) {
-                valido = 0;
-                break;
-            }
-        }
+        printf("\nInforme o tipo do seu projeto: \n1. Pesquisa\n2. Extensão\n3. Ensino\n4. Voltar ao menu\n");
+            char input[10];
+            scanf("%s", input);
+            getchar();
 
-        if (valido) {
-            tipo_projeto = atoi(input); 
-            if (tipo_projeto > 0 && tipo_projeto <= 3) {
-                break;
+            int valido = 1;
+            for (int i = 0; input[i] != '\0'; i++) {
+                if (!isdigit(input[i])) {
+                    valido = 0;
+                    break;
+                }
             }
-        }
-        printf("Opcao invalida não cadastrada!\n\n");
+
+            if (valido) {
+                tipo_projeto = atoi(input);
+                if (tipo_projeto > 0 && tipo_projeto <= 4) {
+                    if (tipo_projeto == 4) {
+                        printf("Voltando ao menu!\n");
+                        return;
+                    }
+                    break;
+                }
+            }
+            printf("Opção inválida não cadastrada!\n\n");
     }
 
     switch (tipo_projeto) {
@@ -427,24 +432,30 @@ void consultar_projeto_por_tipo(No *lista){
     int tipo;
 
     while (1) {
-        printf("Informe o tipo de projeto:\n1. Pesquisa\n2. Extensão\n3. Ensino\n");
-        scanf("%s", input);
+        printf("\nInforme o tipo do seu projeto: \n1. Pesquisa\n2. Extensão\n3. Ensino\n4. Voltar ao menu\n");
+            char input[10];
+            scanf("%s", input);
+            getchar();
 
-        int valido = 1;
-        for (int i = 0; input[i] != '\0'; i++) {
-            if (!isdigit(input[i])) {
-                valido = 0;
-                break;
+            int valido = 1;
+            for (int i = 0; input[i] != '\0'; i++) {
+                if (!isdigit(input[i])) {
+                    valido = 0;
+                    break;
+                }
             }
-        }
 
-        if (valido) {
-            tipo = atoi(input); 
-            if (tipo > 0 && tipo <= 3) {
-                break;
+            if (valido) {
+                tipo = atoi(input);
+                if (tipo > 0 && tipo <= 4) {
+                    if (tipo == 4) {
+                        printf("Voltando ao menu!\n");
+                        return;
+                    }
+                    break;
+                }
             }
-        }
-        printf("Opcao invalida não cadastrada!\n\n");
+            printf("Opção inválida não cadastrada!\n\n");
     }
 
     while (lista != NULL) {
@@ -465,8 +476,10 @@ void consultar_projeto_por_situacao(No *lista){
     char input[10];
 
     while (1) {
-    printf("Informe a situação do projeto:\n1. Concluído\n2. Andamento\n3. Cancelado\n");
-    scanf("%s", input);
+        printf("Informe a situação do projeto:\n1. Concluído\n2. Andamento\n3. Cancelado\n4. Voltar ao menu\n");
+        char input[10];
+        scanf("%s", input);
+        getchar();
 
         int valido = 1;
         for (int i = 0; input[i] != '\0'; i++) {
@@ -477,12 +490,16 @@ void consultar_projeto_por_situacao(No *lista){
         }
 
         if (valido) {
-            situacao = atoi(input); 
-            if (situacao > 0 && situacao <= 3){
+            situacao = atoi(input);
+            if (situacao > 0 && situacao <= 4) {
+                if (situacao == 4) {
+                    printf("Voltando ao menu!\n");
+                    return;
+                }
                 break;
             }
         }
-        printf("Opcao invalida não cadastrada!\n\n");
+        printf("Opção inválida não cadastrada!\n\n");
     }
 
     while (lista != NULL){
@@ -627,135 +644,173 @@ void buscar_projeto_por_codigo(No *lista) {
 void editar_dados_do_projeto(No *lista) {
     int id_unico;
     char input[10];
-
-    while(1){
+    
+    while (1) {
         printf("\nDigite o ID do projeto que deseja editar: ");
         scanf("%s", input);
-
-        // Verifica se a entrada contém apenas dígitos
-        int valido = 1, i;
-        for (i = 0; input[i] != '\0'; i++) {
+        
+        int valido = 1;
+        for (int i = 0; input[i] != '\0'; i++) {
             if (!isdigit(input[i])) {
                 valido = 0;
                 break;
             }
         }
-
+        
         if (valido) {
             id_unico = atoi(input);
             if (id_unico > 0) {
-                break;  // Saí do loop se for um número positivo válido
+                break;
             }
         }
-        printf("Opcao invalida não cadastrada!\n");
+        printf("ID inválido!\n");
     }
 
     No *aux = lista;
-
     while (aux != NULL) {
         if (aux->id_unico == id_unico) {
-            printf("Novo título: ");
-            scanf(" %[^\n]", aux->projeto.nome.titulo_projeto);
-            getchar();
+            int opcao = 0;
 
-            int dia, mes, ano;
-            printf("Nova data de início (Dia/Mês/Ano): ");
-            scanf("%02d/%02d/%04d", &dia, &mes, &ano);
-            getchar();
-            if (!verificar_data(dia, mes, ano)) {
-                printf("Data de início inválida!\n");
-                return;
-            }
-            aux->projeto.data.dia_inicio = dia;
-            aux->projeto.data.mes_inicio = mes;
-            aux->projeto.data.ano_inicio = ano;
+            while (1) {
+                printf("\nO que deseja editar? \n");
+                printf("1. Título \n");
+                printf("2. Data de início \n");
+                printf("3. Situação \n");
+                printf("4. Coordenador \n");
+                printf("5. Alunos \n");
+                printf("6. Orgão Financeiro \n");
+                printf("7. Descrição do projeto \n");
+                printf("8. Sair \n");
+                printf("Escolha uma opção: ");
+                scanf("%s", input);
 
-            int nova_situacao;
-            printf("Nova situação:\n1. Concluído\n2. Andamento\n3. Cancelado\n");
-            scanf("%d", &nova_situacao);
-            getchar();
-
-            switch (nova_situacao) {
-                case 1:
-                    aux->projeto.situacao = concluido;
-                    do {
-                        printf("Data de Término (Dia/Mês/Ano): ");
-                        scanf("%02d/%02d/%04d", &dia, &mes, &ano);
-                        getchar();
-                        if (!verificar_data(dia, mes, ano) ||
-                            (ano < aux->projeto.data.ano_inicio) ||
-                            (ano == aux->projeto.data.ano_inicio && mes < aux->projeto.data.mes_inicio) ||
-                            (ano == aux->projeto.data.ano_inicio && mes == aux->projeto.data.mes_inicio && dia < aux->projeto.data.dia_inicio)) {
-                            printf("Data de término inválida!\n");
-                        } else {
-                            aux->projeto.data.dia_termino = dia;
-                            aux->projeto.data.mes_termino = mes;
-                            aux->projeto.data.ano_termino = ano;
-                            break;
-                        }
-                    } while (1);
-                    break;
-                case 2:
-                    aux->projeto.situacao = andamento;
-                    aux->projeto.data.dia_termino = 0;
-                    aux->projeto.data.mes_termino = 0;
-                    aux->projeto.data.ano_termino = 0;
-                    break;
-                case 3:
-                    aux->projeto.situacao = cancelado;
-                    aux->projeto.data.dia_termino = 0;
-                    aux->projeto.data.mes_termino = 0;
-                    aux->projeto.data.ano_termino = 0;
-                    break;
-                default:
-                    printf("Situação inválida!\n");
-                    return;
+                int valido = 1;
+                for (int i = 0; input[i] != '\0'; i++) {
+                    if (!isdigit(input[i])) {
+                        valido = 0;
+                        break;
+                    }
                 }
 
-            printf("Novo coordenador: ");
-            scanf(" %[^\n]", aux->projeto.nome.coordenador);
-            getchar();
-
-            int num_alunos;
-            printf("Número de alunos envolvidos: ");
-            scanf("%d", &num_alunos);
-            getchar();
-
-            int i, orgao_fi;
-            for (i = 0; i < num_alunos; i++) {
-                printf("Nome do aluno %d: ", i + 1);
-                scanf(" %[^\n]", aux->projeto.nome.alunos_envolvidos[i]);
-                getchar();
+                if (valido) {
+                    opcao = atoi(input);
+                    if (opcao > 0 && opcao <= 8) {
+                        switch (opcao) {
+                            case 1:
+                                printf("Novo título: ");
+                                scanf(" %[^\n]", aux->projeto.nome.titulo_projeto);
+                                break;
+                            case 2:
+                                int dia, mes, ano;
+                                printf("Nova data de início (Dia/Mês/Ano): ");
+                                scanf("%02d/%02d/%04d", &dia, &mes, &ano);
+                                getchar();
+                                if (!verificar_data(dia, mes, ano)) {
+                                    printf("Data de início inválida!\n");
+                                } else {
+                                    aux->projeto.data.dia_inicio = dia;
+                                    aux->projeto.data.mes_inicio = mes;
+                                    aux->projeto.data.ano_inicio = ano;
+                                }
+                                break;
+                            case 3:
+                                int nova_situacao;
+                                printf("Nova situação:\n1. Concluído\n2. Andamento\n3. Cancelado\n");
+                                scanf("%d", &nova_situacao);
+                                getchar();
+                                switch (nova_situacao) {
+                                    case 1:
+                                        aux->projeto.situacao = concluido;
+                                        do {
+                                            printf("Data de Término (Dia/Mês/Ano): ");
+                                            scanf("%02d/%02d/%04d", &dia, &mes, &ano);
+                                            getchar();
+                                            if (!verificar_data(dia, mes, ano) ||
+                                                (ano < aux->projeto.data.ano_inicio) ||
+                                                (ano == aux->projeto.data.ano_inicio && mes < aux->projeto.data.mes_inicio) ||
+                                                (ano == aux->projeto.data.ano_inicio && mes == aux->projeto.data.mes_inicio && dia < aux->projeto.data.dia_inicio)) {
+                                                printf("Data de término inválida!\n");
+                                            } else {
+                                                aux->projeto.data.dia_termino = dia;
+                                                aux->projeto.data.mes_termino = mes;
+                                                aux->projeto.data.ano_termino = ano;
+                                                break;
+                                            }
+                                        } while (1);
+                                        break;
+                                    case 2:
+                                        aux->projeto.situacao = andamento;
+                                        aux->projeto.data.dia_termino = 0;
+                                        aux->projeto.data.mes_termino = 0;
+                                        aux->projeto.data.ano_termino = 0;
+                                        break;
+                                    case 3:
+                                        aux->projeto.situacao = cancelado;
+                                        aux->projeto.data.dia_termino = 0;
+                                        aux->projeto.data.mes_termino = 0;
+                                        aux->projeto.data.ano_termino = 0;
+                                        break;
+                                    default:
+                                        printf("Situação inválida!\n");
+                                        break;
+                                }
+                                break;
+                            case 4:
+                                printf("Novo coordenador: ");
+                                scanf(" %[^\n]", aux->projeto.nome.coordenador);
+                                break;
+                            case 5:
+                                int num_aluno;
+                                printf("Número de alunos envolvidos: ");
+                                scanf("%d", &num_aluno);
+                                getchar();
+                                for (int i = 0; i < num_aluno; i++) {
+                                    printf("Nome do aluno %d: ", i + 1);
+                                    scanf(" %[^\n]", aux->projeto.nome.alunos_envolvidos[i]);
+                                    getchar();
+                                }
+                                aux->projeto.num_alunos = num_aluno;
+                                break;
+                            case 6:
+                                int orgao_fi;
+                                printf("\nHá órgão financeiro? \n1. Sim\n2. Não\n");
+                                scanf("%d", &orgao_fi);
+                                getchar();
+                                if (orgao_fi == 1) {
+                                    printf("\nInforme o nome do órgão financeiro: ");
+                                    scanf(" %[^\n]", aux->projeto.nome.orgao_financeiro);
+                                    getchar();
+                                } else if (orgao_fi == 2) {
+                                    printf("\nNão há órgão financeiro!\n");
+                                    aux->projeto.nome.orgao_financeiro[0] = '\0';
+                                } else {
+                                    printf("Código não identificado!\n");
+                                }
+                                break;
+                            case 7:
+                                printf("Nova descrição: ");
+                                scanf(" %[^\n]", aux->projeto.descricao_do_projeto);
+                                break;
+                            case 8:
+                                printf("Saindo da edição do projeto.\n");
+                                abrir_arquivo(lista, "projetos.txt");
+                                return;
+                        }
+                    } else {
+                        printf("Opção inválida, voltando ao menu de edição...\n");
+                    }
+                } else {
+                    printf("Opção inválida!\n");
+                }
             }
-
-            printf("\nHá órgão financeiro? \n1. Sim\n2. Não\n");
-            scanf("%d", &orgao_fi);
-            getchar();
-
-            if (orgao_fi == 1) {
-                printf("\nInforme o nome do órgão financeiro: ");
-                scanf(" %[^\n]", aux->projeto.nome.orgao_financeiro);
-                getchar();
-            } else if (orgao_fi == 2) {
-                printf("\nNão há órgão financeiro!\n");
-                aux->projeto.nome.orgao_financeiro[0] = '\0';
-            } else {
-                printf("Código não identificado!\n");
-            }
-
-            printf("Nova descrição: ");
-            scanf(" %[^\n]", aux->projeto.descricao_do_projeto);
-            getchar();
-
             printf("Projeto editado com sucesso!\n");
+            abrir_arquivo(lista, "projetos.txt");
             return;
         }
-        // Move o ponteiro para o próximo nó na lista (lista encadeada simples)
-        aux = aux->prox;
+        aux = aux->prox;  // Move o ponteiro para o próximo nó na lista (lista encadeada simples)
     }
     printf("Projeto com ID %d não encontrado.\n", id_unico);
 }
-
 
 void ler_arquivo(No **lista, char *nome_arquivo, int *proximo_id) {
     FILE *arquivo = fopen(nome_arquivo, "rt");
